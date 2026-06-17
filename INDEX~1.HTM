@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title data-i18n="title">My AI Second Brain</title>
+<style>
+  :root{
+    --bg:#0b0d14; --bg2:#11131d; --card:#161926; --card2:#1c2031;
+    --ink:#eef1f8; --muted:#9aa3b8; --line:#262b3d;
+    --a1:#7c5cff; --a2:#19c3fb; --a3:#43e0a0; --warn:#ff7a7a; --amber:#ffb454;
+    --grad:linear-gradient(120deg,#7c5cff,#19c3fb 60%,#43e0a0);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:radial-gradient(1200px 700px at 80% -10%,rgba(124,92,255,.18),transparent 60%),radial-gradient(900px 600px at -10% 20%,rgba(25,195,251,.12),transparent 55%),var(--bg);
+    color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);background:rgba(11,13,20,.72);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:62px;gap:16px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.2px;white-space:nowrap}
+  .dot{width:12px;height:12px;border-radius:50%;background:var(--grad);box-shadow:0 0 16px rgba(124,92,255,.7)}
+  .navright{display:flex;align-items:center;gap:22px}
+  .navlinks{display:flex;gap:20px;font-size:14px;color:var(--muted)}
+  .navlinks a{text-decoration:none;transition:color .2s}
+  .navlinks a:hover{color:var(--ink)}
+  @media(max-width:880px){.navlinks{display:none}}
+  .lang{display:flex;border:1px solid var(--line);border-radius:100px;overflow:hidden;background:var(--card)}
+  .lang button{background:none;border:none;color:var(--muted);font:inherit;font-size:13px;font-weight:600;padding:6px 13px;cursor:pointer;transition:.2s}
+  .lang button.active{background:var(--grad);color:#0b0d14}
+  header{padding:84px 0 60px;text-align:center}
+  .eyebrow{display:inline-block;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--a2);border:1px solid var(--line);padding:6px 14px;border-radius:100px;background:var(--card)}
+  h1{font-size:clamp(38px,7vw,76px);line-height:1.03;margin:22px 0 10px;letter-spacing:-1.5px;font-weight:800}
+  h1 .g,.g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{font-size:clamp(17px,2.4vw,21px);color:var(--muted);max-width:720px;margin:0 auto 14px}
+  .tag{font-size:15px;color:var(--a3);font-weight:600}
+  .stats{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin-top:38px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 26px;min-width:160px}
+  .stat b{display:block;font-size:30px}
+  .stat span{font-size:13px;color:var(--muted)}
+  section{padding:62px 0;border-top:1px solid var(--line)}
+  .kicker{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--a1);font-weight:700;margin-bottom:10px}
+  .kicker.warn{color:var(--amber)}
+  h2{font-size:clamp(27px,4vw,42px);margin:0 0 14px;letter-spacing:-.8px;font-weight:800}
+  .lead{color:var(--muted);max-width:760px;font-size:18px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin-top:34px}
+  .card{background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:18px;padding:24px;transition:transform .25s,border-color .25s}
+  .card:hover{transform:translateY(-4px);border-color:#3b4260}
+  .ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:22px;margin-bottom:14px;background:var(--card2);border:1px solid var(--line)}
+  .card h3{margin:0 0 8px;font-size:18px}
+  .card p{margin:0;color:var(--muted);font-size:14.5px}
+  .card .fix{display:block;margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);font-size:13.5px;color:var(--a3)}
+  .card .fix b{color:var(--a3)}
+  .pain{background:linear-gradient(180deg,rgba(255,122,122,.07),var(--bg2));border:1px solid var(--line);border-radius:18px;padding:22px}
+  .pain .q{font-size:22px;margin-bottom:8px}
+  .pain h3{margin:0 0 6px;font-size:16.5px}
+  .pain p{margin:0;color:var(--muted);font-size:14.5px}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:30px}
+  @media(max-width:640px){.split{grid-template-columns:1fr}}
+  .panel{border-radius:18px;padding:24px;border:1px solid var(--line)}
+  .panel.do{background:linear-gradient(180deg,rgba(67,224,160,.08),transparent)}
+  .panel.dont{background:linear-gradient(180deg,rgba(255,122,122,.08),transparent)}
+  .panel h3{margin:0 0 14px;font-size:16px}
+  .panel ul{margin:0;padding:0;list-style:none}
+  .panel li{padding:9px 0 9px 26px;position:relative;font-size:14.5px;color:var(--muted);border-top:1px solid var(--line)}
+  .panel li:first-child{border-top:none}
+  .panel li b{color:var(--ink);font-weight:600}
+  .panel.do li::before{content:"\2713";position:absolute;left:0;color:var(--a3);font-weight:700}
+  .panel.dont li::before{content:"\2715";position:absolute;left:0;color:var(--warn);font-weight:700}
+  .tl{margin-top:36px;position:relative;padding-left:30px}
+  .tl::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--a1),var(--a2),var(--a3))}
+  .ev{position:relative;margin-bottom:26px}
+  .ev::before{content:"";position:absolute;left:-26px;top:4px;width:14px;height:14px;border-radius:50%;background:var(--bg);border:2px solid var(--a2);box-shadow:0 0 10px rgba(25,195,251,.6)}
+  .ev .t{font-size:13px;color:var(--a2);font-weight:700;letter-spacing:.5px}
+  .ev h4{margin:3px 0 4px;font-size:17px}
+  .ev p{margin:0;color:var(--muted);font-size:14.5px}
+  .loop{display:flex;flex-wrap:wrap;gap:14px;align-items:stretch;margin-top:32px}
+  .loop .step{flex:1;min-width:160px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+  .loop .step .n{font-size:12px;color:var(--a1);font-weight:700}
+  .loop .step h4{margin:6px 0 6px;font-size:15px}
+  .loop .step p{margin:0;font-size:13px;color:var(--muted)}
+  .loop .arr{display:grid;place-items:center;color:var(--muted);font-size:22px}
+  @media(max-width:760px){.loop .arr{transform:rotate(90deg)}}
+  .pull{margin-top:34px;background:linear-gradient(120deg,rgba(124,92,255,.12),rgba(25,195,251,.06));border:1px solid var(--line);border-radius:20px;padding:34px}
+  .pull p{font-size:clamp(20px,3vw,28px);margin:0;line-height:1.35;font-weight:600;letter-spacing:-.4px}
+  .for-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:30px}
+  .for{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+  .for .pn{font-size:13px;color:var(--amber);font-weight:600;margin-bottom:6px}
+  .for b{display:block;margin-bottom:6px;font-size:16px}
+  .for span{color:var(--muted);font-size:14px}
+  footer{padding:54px 0 70px;text-align:center;color:var(--muted);border-top:1px solid var(--line)}
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s,transform .6s}
+  .reveal.in{opacity:1;transform:none}
+  .chip{display:inline-block;font-size:12px;color:var(--a2);background:var(--card2);border:1px solid var(--line);padding:3px 10px;border-radius:100px;margin:3px 4px 0 0}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <div class="brand"><span class="dot"></span> <span data-i18n="brand">The Second Brain</span></div>
+  <div class="navright">
+    <div class="navlinks">
+      <a href="#pain" data-i18n="nav.pain">The problem</a>
+      <a href="#vs" data-i18n="nav.vs">Chat vs brain</a>
+      <a href="#day" data-i18n="nav.day">A day</a>
+      <a href="#system" data-i18n="nav.system">The system</a>
+      <a href="#learns" data-i18n="nav.learns">Learns me</a>
+      <a href="#you" data-i18n="nav.you">For anyone</a>
+    </div>
+    <div class="lang">
+      <button data-lang="en" class="active" onclick="setLang('en')">EN</button>
+      <button data-lang="ro" onclick="setLang('ro')">RO</button>
+    </div>
+  </div>
+</div></nav>
+
+<header><div class="wrap">
+  <span class="eyebrow" data-i18n="hero.eyebrow">Personal AI &middot; runs itself</span>
+  <h1 data-i18n-html="hero.h1">Your AI forgets you<br/>the second you <span class="g">close the tab.</span></h1>
+  <p class="sub" data-i18n-html="hero.sub">Every chat starts from zero. You re-explain, re-paste, re-do &mdash; all day. So I built an AI second brain that <em>remembers</em>, runs itself, and gets sharper every week. It wakes up before I do and leaves a briefing on my desk.</p>
+  <p class="tag" data-i18n="hero.tag">A chat waits to be asked &mdash; and then forgets. This is a worker that remembers.</p>
+  <div class="stats">
+    <div class="stat"><b class="g">5</b><span data-i18n="stat.1">automations running on a schedule</span></div>
+    <div class="stat"><b class="g">0</b><span data-i18n="stat.2">times I re-explain my context</span></div>
+    <div class="stat"><b class="g">24/7</b><span data-i18n="stat.3">memory that never forgets a decision</span></div>
+    <div class="stat"><b class="g">&infin;</b><span data-i18n="stat.4">it gets sharper every week</span></div>
+  </div>
+</div></header>
+
+<section id="pain"><div class="wrap reveal">
+  <div class="kicker warn" data-i18n="pain.kicker">Sound familiar?</div>
+  <h2 data-i18n="pain.h2">A normal AI chat is a goldfish</h2>
+  <p class="lead" data-i18n="pain.lead">Brilliant for five minutes &mdash; then it forgets everything. Here&rsquo;s what that quietly costs you, every single day:</p>
+  <div class="grid">
+    <div class="pain"><div class="q">&#128257;</div><h3 data-i18n="pain.1.h">Groundhog Day briefings</h3><p data-i18n="pain.1.p">You re-explain who you are, your project, your context &mdash; again &mdash; every time you open a new chat. Then again tomorrow.</p></div>
+    <div class="pain"><div class="q">&#128371;</div><h3 data-i18n="pain.2.h">The lost good answer</h3><p data-i18n="pain.2.p">That perfect reply from last Tuesday? Buried in a chat you&rsquo;ll never find again. So you just&hellip; redo the work.</p></div>
+    <div class="pain"><div class="q">&#129513;</div><h3 data-i18n="pain.3.h">It forgets mid-conversation</h3><p data-i18n="pain.3.p">In a long chat, the AI quietly forgets how it started &mdash; its memory fills up &mdash; and starts contradicting itself and dropping details.</p></div>
+    <div class="pain"><div class="q">&#128203;</div><h3 data-i18n="pain.4.h">The copy-paste tax</h3><p data-i18n="pain.4.p">You paste the same background docs, notes and links over and over, just to get one useful answer out of it.</p></div>
+    <div class="pain"><div class="q">&#129002;</div><h3 data-i18n="pain.5.h">Confidently out of date</h3><p data-i18n="pain.5.p">It answers from last month&rsquo;s reality &mdash; the decision that changed, the price that moved &mdash; because nobody told it otherwise.</p></div>
+    <div class="pain"><div class="q">&#128168;</div><h3 data-i18n="pain.6.h">Insights evaporate</h3><p data-i18n="pain.6.p">Every smart conclusion dies in a chat window. Nothing carries to tomorrow. You start from zero. Again.</p></div>
+  </div>
+  <div class="pull"><p data-i18n-html="pain.pull">Most people hit these a dozen times a day and just sigh. <span class="g">I got tired of it &mdash; so I built something that doesn&rsquo;t forget.</span></p></div>
+</div></section>
+
+<section id="vs"><div class="wrap reveal">
+  <div class="kicker" data-i18n="vs.kicker">The real difference</div>
+  <h2 data-i18n="vs.h2">A chat window vs a second brain</h2>
+  <p class="lead" data-i18n="vs.lead">Same underlying AI. Completely different experience &mdash; because one remembers and the other doesn&rsquo;t. This is the whole point.</p>
+  <div class="split">
+    <div class="panel dont"><h3 data-i18n="vs.bad.h">&#128172; A plain AI chat</h3><ul>
+      <li data-i18n-html="vs.bad.1"><b>Memory:</b> forgets the moment you close the tab.</li>
+      <li data-i18n-html="vs.bad.2"><b>Long chats:</b> loses the thread once its memory fills up.</li>
+      <li data-i18n-html="vs.bad.3"><b>Context:</b> you re-paste everything, every time.</li>
+      <li data-i18n-html="vs.bad.4"><b>Freshness:</b> answers from whatever it last happened to see.</li>
+      <li data-i18n-html="vs.bad.5"><b>Your good work:</b> scrolls away and is gone.</li>
+      <li data-i18n-html="vs.bad.6"><b>The effort:</b> you do all the remembering.</li>
+    </ul></div>
+    <div class="panel do"><h3 data-i18n="vs.good.h">&#129504; A second brain</h3><ul>
+      <li data-i18n-html="vs.good.1"><b>Memory:</b> remembers across days, months, and projects.</li>
+      <li data-i18n-html="vs.good.2"><b>Long history:</b> keeps a durable index &mdash; never &ldquo;runs out of room.&rdquo;</li>
+      <li data-i18n-html="vs.good.3"><b>Context:</b> it already knows; you just ask.</li>
+      <li data-i18n-html="vs.good.4"><b>Freshness:</b> refreshes itself daily and flags what&rsquo;s stale.</li>
+      <li data-i18n-html="vs.good.5"><b>Your good work:</b> filed where you can always find it.</li>
+      <li data-i18n-html="vs.good.6"><b>The effort:</b> it does the remembering for you.</li>
+    </ul></div>
+  </div>
+  <p class="lead" style="margin-top:22px" data-i18n-html="vs.foot">The trick isn&rsquo;t a smarter chatbot. It&rsquo;s giving an ordinary one a <span class="g">memory that lives outside the conversation</span> &mdash; and automations that keep it current while I sleep.</p>
+</div></section>
+
+<section id="day"><div class="wrap reveal">
+  <div class="kicker" data-i18n="day.kicker">A day with it</div>
+  <h2 data-i18n="day.h2">It&rsquo;s done half my thinking before coffee</h2>
+  <p class="lead" data-i18n="day.lead">No &ldquo;let me get you up to speed.&rdquo; No re-pasting. I don&rsquo;t kick any of this off &mdash; it happens on its own, every working day, in the background.</p>
+  <div class="tl">
+    <div class="ev"><div class="t" data-i18n="day.e1.t">EARLY MORNING</div><h4 data-i18n="day.e1.h">It reads the day that just happened</h4><p data-i18n="day.e1.p">Every relevant message, meeting and work session since it last looked &mdash; gathered automatically. No copy-paste, nothing missed, nothing read twice.</p></div>
+    <div class="ev"><div class="t" data-i18n="day.e2.t">MOMENTS LATER</div><h4 data-i18n="day.e2.h">It updates its own memory</h4><p data-i18n="day.e2.p">Decisions, commitments, who-owns-what, status changes &mdash; filed in the right place. A month later it still knows the reasoning, not just the outcome. (Try that in a chat window.)</p></div>
+    <div class="ev"><div class="t" data-i18n="day.e3.t">THEN</div><h4 data-i18n="day.e3.h">It proposes my follow-ups</h4><p data-i18n="day.e3.p">Scattered signals become a tidy, checkable to-do list &mdash; and it quietly drops the weak ideas before they reach me.</p></div>
+    <div class="ev"><div class="t" data-i18n="day.e4.t">MONTHLY</div><h4 data-i18n="day.e4.h">It scans the whole market for me</h4><p data-i18n="day.e4.p">Industry shifts and what every tracked competitor shipped &mdash; each line ending in &ldquo;so what does this mean for us.&rdquo;</p></div>
+    <div class="ev"><div class="t" data-i18n="day.e5.t">WEEKLY</div><h4 data-i18n="day.e5.h">It grades itself</h4><p data-i18n="day.e5.p">Reviews its own week &mdash; what it wasted, what it missed, what it could do better &mdash; and proposes its own upgrades.</p></div>
+  </div>
+</div></section>
+
+<section id="system"><div class="wrap reveal">
+  <div class="kicker" data-i18n="sys.kicker">The system</div>
+  <h2 data-i18n="sys.h2">Not one chatbot &mdash; a team of specialists</h2>
+  <p class="lead" data-i18n="sys.lead">Each part has one job, and each one kills a specific daily pain. Together they behave like a chief of staff who never sleeps and never forgets.</p>
+  <div class="grid">
+    <div class="card"><div class="ico">&#129504;</div><h3 data-i18n="sys.c1.h">The Brain</h3><p data-i18n-html="sys.c1.p">A living memory of people, decisions and projects &mdash; indexed so it knows <em>where</em> everything is.</p><span class="fix" data-i18n-html="sys.c1.f"><b>Kills:</b> re-explaining yourself every chat.</span></div>
+    <div class="card"><div class="ico">&#127769;</div><h3 data-i18n="sys.c2.h">The Night-Shift Capture</h3><p data-i18n="sys.c2.p">Every day it rolls up what happened across my tools &mdash; picking up exactly where it left off.</p><span class="fix" data-i18n-html="sys.c2.f"><b>Kills:</b> insights dying in a chat window.</span></div>
+    <div class="card"><div class="ico">&#9989;</div><h3 data-i18n="sys.c3.h">The Quality Gate</h3><p data-i18n="sys.c3.p">Before anything reaches me, expert &ldquo;lenses&rdquo; tear into it and a second opinion checks it again.</p><span class="fix" data-i18n-html="sys.c3.f"><b>Kills:</b> confident, plausible, wrong answers.</span></div>
+    <div class="card"><div class="ico">&#128225;</div><h3 data-i18n="sys.c4.h">The Market Watch</h3><p data-i18n="sys.c4.p">A standing monthly briefing on the industry and competitors, with the &ldquo;so what&rdquo; on every line.</p><span class="fix" data-i18n-html="sys.c4.f"><b>Kills:</b> being the last to know.</span></div>
+    <div class="card"><div class="ico">&#9881;</div><h3 data-i18n="sys.c5.h">The Self-Optimiser</h3><p data-i18n="sys.c5.p">Audits its own efficiency weekly &mdash; trims waste, turns what worked into reusable habits.</p><span class="fix" data-i18n-html="sys.c5.f"><b>Kills:</b> a setup that never improves.</span></div>
+    <div class="card"><div class="ico">&#128737;</div><h3 data-i18n="sys.c6.h">The Watchdog</h3><p data-i18n="sys.c6.p">Keeps the toolkit honest &mdash; flags when something drifts, goes stale or quietly breaks.</p><span class="fix" data-i18n-html="sys.c6.f"><b>Kills:</b> silent rot you notice too late.</span></div>
+  </div>
+</div></section>
+
+<section id="knows"><div class="wrap reveal">
+  <div class="kicker" data-i18n="kn.kicker">It just knows</div>
+  <h2 data-i18n="kn.h2">It knows what to do &mdash; and what to leave alone</h2>
+  <p class="lead" data-i18n="kn.lead">No prompts to memorise. It recognises what I&rsquo;m doing from a few words and routes the work to the right specialist &mdash; and it knows where the lines are.</p>
+  <div class="split">
+    <div class="panel do"><h3 data-i18n="kn.do.h">&#128994; Knows to act</h3><ul>
+      <li data-i18n="kn.do.1">Spots a decision in a meeting and turns it into a tracked follow-up.</li>
+      <li data-i18n="kn.do.2">Recognises a draft headed for leadership and runs the &ldquo;will this land?&rdquo; check first.</li>
+      <li data-i18n="kn.do.3">Pulls the right facts from memory the moment a topic comes up &mdash; no re-briefing.</li>
+      <li data-i18n="kn.do.4">Picks the right expert lens for the task without being told which.</li>
+    </ul></div>
+    <div class="panel dont"><h3 data-i18n="kn.dont.h">&#128993; Knows to hold back</h3><ul>
+      <li data-i18n="kn.dont.1">Anything marked private never enters the brain &mdash; full stop.</li>
+      <li data-i18n="kn.dont.2">Never sends or publishes on its own &mdash; it proposes; I approve.</li>
+      <li data-i18n="kn.dont.3">Won&rsquo;t advance if it couldn&rsquo;t actually read its sources &mdash; it waits rather than skip a day silently.</li>
+      <li data-i18n="kn.dont.4">Won&rsquo;t let a polished-but-wrong idea through just because it reads well.</li>
+    </ul></div>
+  </div>
+  <div style="margin-top:22px">
+    <span class="chip" data-i18n="kn.chip1">understands intent from a phrase</span>
+    <span class="chip" data-i18n="kn.chip2">privacy-aware by default</span>
+    <span class="chip" data-i18n="kn.chip3">propose, don&rsquo;t execute</span>
+    <span class="chip" data-i18n="kn.chip4">fails safe, never silent</span>
+  </div>
+</div></section>
+
+<section id="learns"><div class="wrap reveal">
+  <div class="kicker" data-i18n="ln.kicker">It learned me</div>
+  <h2 data-i18n="ln.h2">A normal chat repeats its mistakes forever. Mine learns once.</h2>
+  <p class="lead" data-i18n-html="ln.lead">Correct a chatbot today and it makes the same mistake tomorrow &mdash; it never saw your correction again. Mine remembers the <em>correction</em>, not just the fact. Steer it once; the lesson sticks.</p>
+  <div class="loop">
+    <div class="step"><div class="n">01</div><h4 data-i18n="ln.s1.h">It works</h4><p data-i18n="ln.s1.p">Drafts, proposes, captures.</p></div>
+    <div class="arr">&rarr;</div>
+    <div class="step"><div class="n">02</div><h4 data-i18n="ln.s2.h">I steer</h4><p data-i18n="ln.s2.p">&ldquo;No &mdash; lead with the number.&rdquo; &ldquo;We don&rsquo;t do it that way.&rdquo;</p></div>
+    <div class="arr">&rarr;</div>
+    <div class="step"><div class="n">03</div><h4 data-i18n="ln.s3.h">It records the lesson</h4><p data-i18n-html="ln.s3.p">Not the one fix &mdash; the <em>rule</em> behind it.</p></div>
+    <div class="arr">&rarr;</div>
+    <div class="step"><div class="n">04</div><h4 data-i18n="ln.s4.h">It gets sharper</h4><p data-i18n="ln.s4.p">Next time, it already knows. Even its quality reviewers learn new tricks from the smart people around me.</p></div>
+  </div>
+  <div class="pull"><p data-i18n-html="ln.pull">It keeps its own <span class="g">error journal</span> and reviews it on a schedule. It notices what it didn&rsquo;t know, and goes and fixes that gap &mdash; <span class="g">without being asked</span>.</p></div>
+</div></section>
+
+<section id="you"><div class="wrap reveal">
+  <div class="kicker" data-i18n="you.kicker">For anyone</div>
+  <h2 data-i18n="you.h2">You don&rsquo;t have to be technical &mdash; you just have to be tired of repeating yourself</h2>
+  <p class="lead" data-i18n="you.lead">No jargon to learn. You talk in plain language; the memory and quality control happen underneath. If any of these is you, a setup like this changes your week:</p>
+  <div class="for-grid">
+    <div class="for"><div class="pn" data-i18n="you.f1.pn">&ldquo;I start every day lost&rdquo;</div><b data-i18n="you.f1.b">The busy operator</b><span data-i18n="you.f1.s">Walk in to a briefing of what changed overnight, with your follow-ups already drafted.</span></div>
+    <div class="for"><div class="pn" data-i18n="you.f2.pn">&ldquo;Why did we decide that?&rdquo;</div><b data-i18n="you.f2.b">Buried under detail</b><span data-i18n="you.f2.s">Never lose the reasoning behind a decision. The context is there a month or a year later.</span></div>
+    <div class="for"><div class="pn" data-i18n="you.f3.pn">&ldquo;It&rsquo;s in Slack&hellip; somewhere&rdquo;</div><b data-i18n="you.f3.b">Drowning in tools</b><span data-i18n="you.f3.s">Messages, calls, docs, email &mdash; read and distilled into one place you can actually ask.</span></div>
+    <div class="for"><div class="pn" data-i18n="you.f4.pn">&ldquo;I&rsquo;ve explained this 10 times&rdquo;</div><b data-i18n="you.f4.b">Repeating yourself</b><span data-i18n="you.f4.s">Say it once. It becomes a reusable habit you trigger with a sentence.</span></div>
+  </div>
+  <div class="pull" style="margin-top:30px"><p data-i18n-html="you.pull">The difference in one line: <span class="g">a tool you pick up and re-explain vs. a teammate that already knows.</span></p></div>
+</div></section>
+
+<footer><div class="wrap">
+  <span data-i18n="foot.1">Built and tuned by me &mdash; a personal AI second brain that remembers, decides, checks itself, and improves.</span><br/>
+  <span style="font-size:13px" data-i18n="foot.2">Plain language in. Finished, reviewed work out. The rest runs on its own &mdash; and it doesn&rsquo;t forget.</span>
+</div></footer>
+
+<script>
+const I18N={
+ en:{},
+ ro:{
+  "title":"Al Doilea Creier AI al meu",
+  "brand":"Al Doilea Creier",
+  "nav.pain":"Problema","nav.vs":"Chat vs creier","nav.day":"O zi","nav.system":"Sistemul","nav.learns":"Ma invata","nav.you":"Pentru oricine",
+  "hero.eyebrow":"AI personal &middot; se ruleaza singur",
+  "hero.h1":"AI-ul tau te uita<br/>in clipa in care <span class='g'>inchizi tab-ul.</span>",
+  "hero.sub":"Fiecare conversatie incepe de la zero. Reexplici, dai iar copy-paste, refaci &mdash; toata ziua. Asa ca mi-am construit un al doilea creier AI care <em>isi aminteste</em>, se ruleaza singur si devine mai bun in fiecare saptamana. Se trezeste inaintea mea si imi lasa un brief pe birou.",
+  "hero.tag":"Un chat asteapta sa fie intrebat &mdash; si apoi uita. Acesta e un lucrator care isi aminteste.",
+  "stat.1":"automatizari care ruleaza programat",
+  "stat.2":"ori in care imi reexplic contextul",
+  "stat.3":"memorie care nu uita nicio decizie",
+  "stat.4":"devine mai bun in fiecare saptamana",
+  "pain.kicker":"Iti suna cunoscut?",
+  "pain.h2":"Un chat AI obisnuit e un peste auriu",
+  "pain.lead":"Genial cinci minute &mdash; apoi uita tot. Iata ce te costa asta, pe tacute, in fiecare zi:",
+  "pain.1.h":"Briefinguri Ziua Cartitei","pain.1.p":"Reexplici cine esti, proiectul tau, contextul &mdash; <em>din nou</em> &mdash; de fiecare data cand deschizi un chat nou. Si iar maine.",
+  "pain.2.h":"Raspunsul bun, pierdut","pain.2.p":"Raspunsul ala perfect de martea trecuta? Ingropat intr-un chat pe care nu-l mai gasesti niciodata. Asa ca refaci munca.",
+  "pain.3.h":"Uita la mijlocul conversatiei","pain.3.p":"Intr-un chat lung, AI-ul uita pe tacute cum a inceput &mdash; memoria i se umple &mdash; si incepe sa se contrazica si sa piarda detalii.",
+  "pain.4.h":"Taxa de copy-paste","pain.4.p":"Lipesti aceleasi documente, notite si linkuri iar si iar, doar ca sa scoti un singur raspuns util din el.",
+  "pain.5.h":"Sigur pe el, dar depasit","pain.5.p":"Raspunde din realitatea de luna trecuta &mdash; decizia care s-a schimbat, pretul care s-a miscat &mdash; pentru ca nu i-a spus nimeni altceva.",
+  "pain.6.h":"Concluziile se evapora","pain.6.p":"Fiecare concluzie desteapta moare intr-o fereastra de chat. Nimic nu trece in ziua urmatoare. O iei de la zero. Iar.",
+  "pain.pull":"Cei mai multi lovesc in astea de zece ori pe zi si doar ofteaza. <span class='g'>M-am saturat &mdash; asa ca am construit ceva care nu uita.</span>",
+  "vs.kicker":"Diferenta reala",
+  "vs.h2":"O fereastra de chat vs un al doilea creier",
+  "vs.lead":"Acelasi AI dedesubt. O experienta complet diferita &mdash; pentru ca unul isi aminteste, celalalt nu. Asta e tot rostul.",
+  "vs.bad.h":"&#128172; Un chat AI simplu",
+  "vs.bad.1":"<b>Memorie:</b> uita in clipa in care inchizi tab-ul.",
+  "vs.bad.2":"<b>Chaturi lungi:</b> pierde firul cand i se umple memoria.",
+  "vs.bad.3":"<b>Context:</b> relipesti totul, de fiecare data.",
+  "vs.bad.4":"<b>Prospetime:</b> raspunde din ce a apucat sa vada ultima data.",
+  "vs.bad.5":"<b>Munca ta buna:</b> dispare prin scroll si gata.",
+  "vs.bad.6":"<b>Efortul:</b> tu faci toata tinerea de minte.",
+  "vs.good.h":"&#129504; Un al doilea creier",
+  "vs.good.1":"<b>Memorie:</b> isi aminteste peste zile, luni si proiecte.",
+  "vs.good.2":"<b>Istoric lung:</b> tine un index durabil &mdash; nu ramane fara loc niciodata.",
+  "vs.good.3":"<b>Context:</b> deja stie; tu doar intrebi.",
+  "vs.good.4":"<b>Prospetime:</b> se reimprospateaza zilnic si semnaleaza ce e invechit.",
+  "vs.good.5":"<b>Munca ta buna:</b> pusa unde o gasesti mereu.",
+  "vs.good.6":"<b>Efortul:</b> el tine minte in locul tau.",
+  "vs.foot":"Trucul nu e un chatbot mai destept. E sa dai unuia obisnuit o <span class='g'>memorie care traieste in afara conversatiei</span> &mdash; plus automatizari care o tin la zi cat dorm eu.",
+  "day.kicker":"O zi cu el",
+  "day.h2":"A facut jumatate din gandit inainte de cafea",
+  "day.lead":"Niciun stai sa te pun la curent. Niciun relipit. Nu pornesc nimic din toate astea &mdash; se intampla singure, in fiecare zi lucratoare, in fundal.",
+  "day.e1.t":"DIS-DE-DIMINEATA","day.e1.h":"Citeste ziua care tocmai a trecut","day.e1.p":"Fiecare mesaj, intalnire si sesiune de lucru relevanta de cand s-a uitat ultima data &mdash; adunate automat. Fara copy-paste, nimic ratat, nimic citit de doua ori.",
+  "day.e2.t":"CATEVA CLIPE MAI TARZIU","day.e2.h":"Isi actualizeaza singur memoria","day.e2.p":"Decizii, angajamente, cine-ce-detine, schimbari de status &mdash; puse la locul potrivit. O luna mai tarziu inca stie rationamentul, nu doar rezultatul. (Incearca asta intr-un chat.)",
+  "day.e3.t":"APOI","day.e3.h":"Imi propune pasii urmatori","day.e3.p":"Semnale imprastiate devin o lista ordonata si bifabila &mdash; si renunta discret la ideile slabe inainte sa ajunga la mine.",
+  "day.e4.t":"LUNAR","day.e4.h":"Scaneaza toata piata pentru mine","day.e4.p":"Miscarile din industrie si ce a lansat fiecare competitor urmarit &mdash; fiecare rand terminand cu si ce inseamna asta pentru noi.",
+  "day.e5.t":"SAPTAMANAL","day.e5.h":"Se autoevalueaza","day.e5.p":"Isi trece in revista propria saptamana &mdash; ce a irosit, ce a ratat, ce ar putea face mai bine &mdash; si isi propune singur imbunatatiri.",
+  "sys.kicker":"Sistemul",
+  "sys.h2":"Nu un singur chatbot &mdash; o echipa de specialisti",
+  "sys.lead":"Fiecare parte are o singura treaba si fiecare omoara o durere zilnica anume. Impreuna se comporta ca un sef de cabinet care nu doarme si nu uita niciodata.",
+  "sys.c1.h":"Creierul","sys.c1.p":"O memorie vie a oamenilor, deciziilor si proiectelor &mdash; indexata ca sa stie <em>unde</em> e totul.","sys.c1.f":"<b>Omoara:</b> reexplicatul la fiecare chat.",
+  "sys.c2.h":"Captura de noapte","sys.c2.p":"In fiecare zi aduna ce s-a intamplat in uneltele mele &mdash; reluand exact de unde a ramas.","sys.c2.f":"<b>Omoara:</b> concluziile care mor intr-o fereastra de chat.",
+  "sys.c3.h":"Poarta de calitate","sys.c3.p":"Inainte sa ajunga ceva la mine, lentile experte il analizeaza critic si o a doua opinie il verifica din nou.","sys.c3.f":"<b>Omoara:</b> raspunsurile sigure, plauzibile si gresite.",
+  "sys.c4.h":"Radarul de piata","sys.c4.p":"Un brief lunar permanent despre industrie si competitori, cu si ce inseamna pe fiecare rand.","sys.c4.f":"<b>Omoara:</b> sa afli ultimul.",
+  "sys.c5.h":"Auto-optimizatorul","sys.c5.p":"Isi auditeaza eficienta saptamanal &mdash; taie risipa, transforma ce a mers in obiceiuri reutilizabile.","sys.c5.f":"<b>Omoara:</b> un sistem care nu se imbunatateste niciodata.",
+  "sys.c6.h":"Cainele de paza","sys.c6.p":"Tine setul de unelte cinstit &mdash; semnaleaza cand ceva deriveaza, se invecheste sau se strica pe tacute.","sys.c6.f":"<b>Omoara:</b> degradarea tacuta pe care o observi prea tarziu.",
+  "kn.kicker":"Pur si simplu stie",
+  "kn.h2":"Stie ce sa faca &mdash; si ce sa lase in pace",
+  "kn.lead":"Niciun prompt de memorat. Recunoaste din cateva cuvinte ce fac si trimite munca la specialistul potrivit &mdash; si stie unde sunt limitele.",
+  "kn.do.h":"&#128994; Stie sa actioneze",
+  "kn.do.1":"Observa o decizie intr-o intalnire si o transforma intr-o actiune urmarita.",
+  "kn.do.2":"Recunoaste o ciorna care merge spre conducere si ruleaza intai verificarea va prinde?.",
+  "kn.do.3":"Scoate faptele potrivite din memorie in clipa in care apare un subiect &mdash; fara reexplicatii.",
+  "kn.do.4":"Alege lentila experta potrivita fara sa i se spuna care.",
+  "kn.dont.h":"&#128993; Stie sa se abtina",
+  "kn.dont.1":"Orice e marcat privat nu intra niciodata in creier &mdash; punct.",
+  "kn.dont.2":"Nu trimite si nu publica nimic singur &mdash; propune; eu aprob.",
+  "kn.dont.3":"Nu avanseaza daca n-a putut citi sursele &mdash; asteapta in loc sa sara peste o zi pe tacute.",
+  "kn.dont.4":"Nu lasa sa treaca o idee slefuita-dar-gresita doar pentru ca suna bine.",
+  "kn.chip1":"intelege intentia dintr-o fraza","kn.chip2":"constient de confidentialitate din start","kn.chip3":"propune, nu executa","kn.chip4":"esueaza in siguranta, niciodata pe tacute",
+  "ln.kicker":"M-a invatat pe mine",
+  "ln.h2":"Un chat obisnuit isi repeta greselile la nesfarsit. Al meu invata o data.",
+  "ln.lead":"Corectezi un chatbot azi si maine face aceeasi greseala &mdash; nu ti-a mai vazut niciodata corectia. Al meu retine <em>corectia</em>, nu doar faptul. Il indrepti o data; lectia ramane.",
+  "ln.s1.h":"Lucreaza","ln.s1.p":"Scrie ciorne, propune, captureaza.",
+  "ln.s2.h":"Il indrept","ln.s2.p":"Nu &mdash; incepe cu cifra. Noi nu facem asa.",
+  "ln.s3.h":"Retine lectia","ln.s3.p":"Nu corectia punctuala &mdash; <em>regula</em> din spate.",
+  "ln.s4.h":"Devine mai bun","ln.s4.p":"Data viitoare deja stie. Pana si recenzorii lui de calitate invata trucuri noi de la oamenii destepti din jurul meu.",
+  "ln.pull":"Isi tine propriul <span class='g'>jurnal de erori</span> si il revizuieste programat. Observa ce nu stia si se duce sa acopere acel gol &mdash; <span class='g'>fara sa i se ceara</span>.",
+  "you.kicker":"Pentru oricine",
+  "you.h2":"Nu trebuie sa fii tehnic &mdash; doar sa te fi saturat sa te tot repeti",
+  "you.lead":"Niciun jargon de invatat. Vorbesti normal; memoria si controlul calitatii se intampla dedesubt. Daca te regasesti in vreuna, un astfel de sistem iti schimba saptamana:",
+  "you.f1.pn":"Incep fiecare zi pierdut","you.f1.b":"Operatorul ocupat","you.f1.s":"Intri direct intr-un brief cu ce s-a schimbat peste noapte, cu actiunile tale deja schitate.",
+  "you.f2.pn":"De ce am decis asta?","you.f2.b":"Ingropat in detalii","you.f2.s":"Nu mai pierzi rationamentul din spatele unei decizii. Contextul e acolo o luna sau un an mai tarziu.",
+  "you.f3.pn":"E in Slack... pe undeva","you.f3.b":"Inecat in unelte","you.f3.s":"Mesaje, apeluri, documente, email &mdash; citite si distilate intr-un singur loc pe care chiar il poti intreba.",
+  "you.f4.pn":"Am explicat asta de 10 ori","you.f4.b":"Te repeti","you.f4.s":"Spune o data. Devine un obicei reutilizabil pe care il pornesti cu o fraza.",
+  "you.pull":"Diferenta intr-o fraza: <span class='g'>o unealta pe care o iei in mana si o reexplici vs. un coleg care deja stie.</span>",
+  "foot.1":"Construit si reglat de mine &mdash; un al doilea creier AI personal care isi aminteste, decide, se verifica singur si se imbunatateste.",
+  "foot.2":"Limbaj normal la intrare. Munca finita si verificata la iesire. Restul se ruleaza singur &mdash; si nu uita."
+ }
+};
+(function(){
+ document.querySelectorAll('[data-i18n]').forEach(function(el){I18N.en[el.getAttribute('data-i18n')]=el.innerHTML;});
+ document.querySelectorAll('[data-i18n-html]').forEach(function(el){I18N.en[el.getAttribute('data-i18n-html')]=el.innerHTML;});
+})();
+function setLang(l){
+ var d=I18N[l]||I18N.en;
+ document.querySelectorAll('[data-i18n]').forEach(function(el){var k=el.getAttribute('data-i18n');var v=(d[k]!=null?d[k]:I18N.en[k]);if(v!=null)el.innerHTML=v;});
+ document.querySelectorAll('[data-i18n-html]').forEach(function(el){var k=el.getAttribute('data-i18n-html');var v=(d[k]!=null?d[k]:I18N.en[k]);if(v!=null)el.innerHTML=v;});
+ document.documentElement.lang=l;
+ document.querySelectorAll('.lang button').forEach(function(b){b.classList.toggle('active',b.dataset.lang===l);});
+ try{localStorage.setItem('sb_lang',l);}catch(e){}
+}
+(function(){var s='en';try{s=localStorage.getItem('sb_lang')||'en';}catch(e){}setLang(s);})();
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('in');});},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+</script>
+</body>
+</html>

@@ -21,7 +21,7 @@
   .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.2px;white-space:nowrap}
   .dot{width:12px;height:12px;border-radius:50%;background:var(--grad);box-shadow:0 0 16px rgba(124,92,255,.7)}
   .navright{display:flex;align-items:center;gap:22px}
-  .navlinks{display:flex;gap:20px;font-size:14px;color:var(--muted)}
+  .navlinks{display:flex;gap:20px;font-size:14px;color:#c3cbe0;font-weight:500}
   .navlinks a{text-decoration:none;transition:color .2s}
   .navlinks a:hover{color:var(--ink)}
   @media(max-width:880px){.navlinks{display:none}}
@@ -34,8 +34,9 @@
   h1 .g,.g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   .sub{font-size:clamp(17px,2.4vw,21px);color:var(--muted);max-width:720px;margin:0 auto 14px}
   .tag{font-size:15px;color:var(--a3);font-weight:600}
-  .stats{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin-top:38px}
-  .stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 26px;min-width:160px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:38px}
+  @media(max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 16px}
   .stat b{display:block;font-size:30px}
   .stat span{font-size:13px;color:var(--muted)}
   section{padding:62px 0;border-top:1px solid var(--line)}
@@ -117,8 +118,8 @@
 <header><div class="wrap">
   <span class="eyebrow" data-i18n="hero.eyebrow">Personal AI &middot; runs itself</span>
   <h1 data-i18n-html="hero.h1">Your AI forgets you<br/>the second you <span class="g">close the tab.</span></h1>
-  <p class="sub" data-i18n-html="hero.sub">Every chat starts from zero. You re-explain, re-paste, re-do &mdash; all day. So I built an AI second brain that <em>remembers</em>, runs itself, and gets sharper every week. It wakes up before I do and leaves a briefing on my desk.</p>
-  <p class="tag" data-i18n="hero.tag">A chat waits to be asked &mdash; and then forgets. This is a worker that remembers.</p>
+  <p class="sub" data-i18n-html="hero.sub">Every new chat: re-explain, re-paste, re-do. So I built a second brain that <em>remembers</em> &mdash; it runs itself, sharpens weekly, and briefs me before I&rsquo;m awake.</p>
+  <p class="tag" data-i18n="hero.tag">A chat waits, then forgets. This one works &mdash; and remembers.</p>
   <div class="stats">
     <div class="stat"><b class="g">5</b><span data-i18n="stat.1">automations running on a schedule</span></div>
     <div class="stat"><b class="g">0</b><span data-i18n="stat.2">times I re-explain my context</span></div>
@@ -130,7 +131,7 @@
 <section id="pain"><div class="wrap reveal">
   <div class="kicker warn" data-i18n="pain.kicker">Sound familiar?</div>
   <h2 data-i18n="pain.h2">A normal AI chat is a goldfish</h2>
-  <p class="lead" data-i18n="pain.lead">Brilliant for five minutes &mdash; then it forgets everything. Here&rsquo;s what that quietly costs you, every single day:</p>
+  <p class="lead" data-i18n="pain.lead">Brilliant for five minutes &mdash; then it forgets everything. Here&rsquo;s what that costs you, every day:</p>
   <div class="grid">
     <div class="pain"><div class="q">&#128257;</div><h3 data-i18n="pain.1.h">Groundhog Day briefings</h3><p data-i18n="pain.1.p">You re-explain who you are, your project, your context &mdash; again &mdash; every time you open a new chat. Then again tomorrow.</p></div>
     <div class="pain"><div class="q">&#128371;</div><h3 data-i18n="pain.2.h">The lost good answer</h3><p data-i18n="pain.2.p">That perfect reply from last Tuesday? Buried in a chat you&rsquo;ll never find again. So you just&hellip; redo the work.</p></div>
@@ -139,7 +140,7 @@
     <div class="pain"><div class="q">&#129002;</div><h3 data-i18n="pain.5.h">Confidently out of date</h3><p data-i18n="pain.5.p">It answers from last month&rsquo;s reality &mdash; the decision that changed, the price that moved &mdash; because nobody told it otherwise.</p></div>
     <div class="pain"><div class="q">&#128168;</div><h3 data-i18n="pain.6.h">Insights evaporate</h3><p data-i18n="pain.6.p">Every smart conclusion dies in a chat window. Nothing carries to tomorrow. You start from zero. Again.</p></div>
   </div>
-  <div class="pull"><p data-i18n-html="pain.pull">Most people hit these a dozen times a day and just sigh. <span class="g">I got tired of it &mdash; so I built something that doesn&rsquo;t forget.</span></p></div>
+  <div class="pull"><p data-i18n-html="pain.pull">We all hit these a dozen times a day and shrug. <span class="g">I didn&rsquo;t &mdash; so I built something that doesn&rsquo;t forget.</span></p></div>
 </div></section>
 
 <section id="vs"><div class="wrap reveal">
@@ -258,95 +259,143 @@
 const I18N={
  en:{},
  ro:{
-  "title":"Al Doilea Creier AI al meu",
-  "brand":"Al Doilea Creier",
-  "nav.pain":"Problema","nav.vs":"Chat vs creier","nav.day":"O zi","nav.system":"Sistemul","nav.learns":"Ma invata","nav.you":"Pentru oricine",
-  "hero.eyebrow":"AI personal &middot; se ruleaza singur",
-  "hero.h1":"AI-ul tau te uita<br/>in clipa in care <span class='g'>inchizi tab-ul.</span>",
-  "hero.sub":"Fiecare conversatie incepe de la zero. Reexplici, dai iar copy-paste, refaci &mdash; toata ziua. Asa ca mi-am construit un al doilea creier AI care <em>isi aminteste</em>, se ruleaza singur si devine mai bun in fiecare saptamana. Se trezeste inaintea mea si imi lasa un brief pe birou.",
-  "hero.tag":"Un chat asteapta sa fie intrebat &mdash; si apoi uita. Acesta e un lucrator care isi aminteste.",
-  "stat.1":"automatizari care ruleaza programat",
-  "stat.2":"ori in care imi reexplic contextul",
-  "stat.3":"memorie care nu uita nicio decizie",
-  "stat.4":"devine mai bun in fiecare saptamana",
-  "pain.kicker":"Iti suna cunoscut?",
-  "pain.h2":"Un chat AI obisnuit e un peste auriu",
-  "pain.lead":"Genial cinci minute &mdash; apoi uita tot. Iata ce te costa asta, pe tacute, in fiecare zi:",
-  "pain.1.h":"Briefinguri Ziua Cartitei","pain.1.p":"Reexplici cine esti, proiectul tau, contextul &mdash; <em>din nou</em> &mdash; de fiecare data cand deschizi un chat nou. Si iar maine.",
-  "pain.2.h":"Raspunsul bun, pierdut","pain.2.p":"Raspunsul ala perfect de martea trecuta? Ingropat intr-un chat pe care nu-l mai gasesti niciodata. Asa ca refaci munca.",
-  "pain.3.h":"Uita la mijlocul conversatiei","pain.3.p":"Intr-un chat lung, AI-ul uita pe tacute cum a inceput &mdash; memoria i se umple &mdash; si incepe sa se contrazica si sa piarda detalii.",
-  "pain.4.h":"Taxa de copy-paste","pain.4.p":"Lipesti aceleasi documente, notite si linkuri iar si iar, doar ca sa scoti un singur raspuns util din el.",
-  "pain.5.h":"Sigur pe el, dar depasit","pain.5.p":"Raspunde din realitatea de luna trecuta &mdash; decizia care s-a schimbat, pretul care s-a miscat &mdash; pentru ca nu i-a spus nimeni altceva.",
-  "pain.6.h":"Concluziile se evapora","pain.6.p":"Fiecare concluzie desteapta moare intr-o fereastra de chat. Nimic nu trece in ziua urmatoare. O iei de la zero. Iar.",
-  "pain.pull":"Cei mai multi lovesc in astea de zece ori pe zi si doar ofteaza. <span class='g'>M-am saturat &mdash; asa ca am construit ceva care nu uita.</span>",
-  "vs.kicker":"Diferenta reala",
-  "vs.h2":"O fereastra de chat vs un al doilea creier",
-  "vs.lead":"Acelasi AI dedesubt. O experienta complet diferita &mdash; pentru ca unul isi aminteste, celalalt nu. Asta e tot rostul.",
-  "vs.bad.h":"&#128172; Un chat AI simplu",
-  "vs.bad.1":"<b>Memorie:</b> uita in clipa in care inchizi tab-ul.",
-  "vs.bad.2":"<b>Chaturi lungi:</b> pierde firul cand i se umple memoria.",
-  "vs.bad.3":"<b>Context:</b> relipesti totul, de fiecare data.",
-  "vs.bad.4":"<b>Prospetime:</b> raspunde din ce a apucat sa vada ultima data.",
-  "vs.bad.5":"<b>Munca ta buna:</b> dispare prin scroll si gata.",
-  "vs.bad.6":"<b>Efortul:</b> tu faci toata tinerea de minte.",
-  "vs.good.h":"&#129504; Un al doilea creier",
-  "vs.good.1":"<b>Memorie:</b> isi aminteste peste zile, luni si proiecte.",
-  "vs.good.2":"<b>Istoric lung:</b> tine un index durabil &mdash; nu ramane fara loc niciodata.",
-  "vs.good.3":"<b>Context:</b> deja stie; tu doar intrebi.",
-  "vs.good.4":"<b>Prospetime:</b> se reimprospateaza zilnic si semnaleaza ce e invechit.",
-  "vs.good.5":"<b>Munca ta buna:</b> pusa unde o gasesti mereu.",
-  "vs.good.6":"<b>Efortul:</b> el tine minte in locul tau.",
-  "vs.foot":"Trucul nu e un chatbot mai destept. E sa dai unuia obisnuit o <span class='g'>memorie care traieste in afara conversatiei</span> &mdash; plus automatizari care o tin la zi cat dorm eu.",
-  "day.kicker":"O zi cu el",
-  "day.h2":"A facut jumatate din gandit inainte de cafea",
-  "day.lead":"Niciun stai sa te pun la curent. Niciun relipit. Nu pornesc nimic din toate astea &mdash; se intampla singure, in fiecare zi lucratoare, in fundal.",
-  "day.e1.t":"DIS-DE-DIMINEATA","day.e1.h":"Citeste ziua care tocmai a trecut","day.e1.p":"Fiecare mesaj, intalnire si sesiune de lucru relevanta de cand s-a uitat ultima data &mdash; adunate automat. Fara copy-paste, nimic ratat, nimic citit de doua ori.",
-  "day.e2.t":"CATEVA CLIPE MAI TARZIU","day.e2.h":"Isi actualizeaza singur memoria","day.e2.p":"Decizii, angajamente, cine-ce-detine, schimbari de status &mdash; puse la locul potrivit. O luna mai tarziu inca stie rationamentul, nu doar rezultatul. (Incearca asta intr-un chat.)",
-  "day.e3.t":"APOI","day.e3.h":"Imi propune pasii urmatori","day.e3.p":"Semnale imprastiate devin o lista ordonata si bifabila &mdash; si renunta discret la ideile slabe inainte sa ajunga la mine.",
-  "day.e4.t":"LUNAR","day.e4.h":"Scaneaza toata piata pentru mine","day.e4.p":"Miscarile din industrie si ce a lansat fiecare competitor urmarit &mdash; fiecare rand terminand cu si ce inseamna asta pentru noi.",
-  "day.e5.t":"SAPTAMANAL","day.e5.h":"Se autoevalueaza","day.e5.p":"Isi trece in revista propria saptamana &mdash; ce a irosit, ce a ratat, ce ar putea face mai bine &mdash; si isi propune singur imbunatatiri.",
-  "sys.kicker":"Sistemul",
-  "sys.h2":"Nu un singur chatbot &mdash; o echipa de specialisti",
-  "sys.lead":"Fiecare parte are o singura treaba si fiecare omoara o durere zilnica anume. Impreuna se comporta ca un sef de cabinet care nu doarme si nu uita niciodata.",
-  "sys.c1.h":"Creierul","sys.c1.p":"O memorie vie a oamenilor, deciziilor si proiectelor &mdash; indexata ca sa stie <em>unde</em> e totul.","sys.c1.f":"<b>Omoara:</b> reexplicatul la fiecare chat.",
-  "sys.c2.h":"Captura de noapte","sys.c2.p":"In fiecare zi aduna ce s-a intamplat in uneltele mele &mdash; reluand exact de unde a ramas.","sys.c2.f":"<b>Omoara:</b> concluziile care mor intr-o fereastra de chat.",
-  "sys.c3.h":"Poarta de calitate","sys.c3.p":"Inainte sa ajunga ceva la mine, lentile experte il analizeaza critic si o a doua opinie il verifica din nou.","sys.c3.f":"<b>Omoara:</b> raspunsurile sigure, plauzibile si gresite.",
-  "sys.c4.h":"Radarul de piata","sys.c4.p":"Un brief lunar permanent despre industrie si competitori, cu si ce inseamna pe fiecare rand.","sys.c4.f":"<b>Omoara:</b> sa afli ultimul.",
-  "sys.c5.h":"Auto-optimizatorul","sys.c5.p":"Isi auditeaza eficienta saptamanal &mdash; taie risipa, transforma ce a mers in obiceiuri reutilizabile.","sys.c5.f":"<b>Omoara:</b> un sistem care nu se imbunatateste niciodata.",
-  "sys.c6.h":"Cainele de paza","sys.c6.p":"Tine setul de unelte cinstit &mdash; semnaleaza cand ceva deriveaza, se invecheste sau se strica pe tacute.","sys.c6.f":"<b>Omoara:</b> degradarea tacuta pe care o observi prea tarziu.",
-  "kn.kicker":"Pur si simplu stie",
-  "kn.h2":"Stie ce sa faca &mdash; si ce sa lase in pace",
-  "kn.lead":"Niciun prompt de memorat. Recunoaste din cateva cuvinte ce fac si trimite munca la specialistul potrivit &mdash; si stie unde sunt limitele.",
-  "kn.do.h":"&#128994; Stie sa actioneze",
-  "kn.do.1":"Observa o decizie intr-o intalnire si o transforma intr-o actiune urmarita.",
-  "kn.do.2":"Recunoaste o ciorna care merge spre conducere si ruleaza intai verificarea va prinde?.",
-  "kn.do.3":"Scoate faptele potrivite din memorie in clipa in care apare un subiect &mdash; fara reexplicatii.",
-  "kn.do.4":"Alege lentila experta potrivita fara sa i se spuna care.",
-  "kn.dont.h":"&#128993; Stie sa se abtina",
-  "kn.dont.1":"Orice e marcat privat nu intra niciodata in creier &mdash; punct.",
-  "kn.dont.2":"Nu trimite si nu publica nimic singur &mdash; propune; eu aprob.",
-  "kn.dont.3":"Nu avanseaza daca n-a putut citi sursele &mdash; asteapta in loc sa sara peste o zi pe tacute.",
-  "kn.dont.4":"Nu lasa sa treaca o idee slefuita-dar-gresita doar pentru ca suna bine.",
-  "kn.chip1":"intelege intentia dintr-o fraza","kn.chip2":"constient de confidentialitate din start","kn.chip3":"propune, nu executa","kn.chip4":"esueaza in siguranta, niciodata pe tacute",
-  "ln.kicker":"M-a invatat pe mine",
-  "ln.h2":"Un chat obisnuit isi repeta greselile la nesfarsit. Al meu invata o data.",
-  "ln.lead":"Corectezi un chatbot azi si maine face aceeasi greseala &mdash; nu ti-a mai vazut niciodata corectia. Al meu retine <em>corectia</em>, nu doar faptul. Il indrepti o data; lectia ramane.",
-  "ln.s1.h":"Lucreaza","ln.s1.p":"Scrie ciorne, propune, captureaza.",
-  "ln.s2.h":"Il indrept","ln.s2.p":"Nu &mdash; incepe cu cifra. Noi nu facem asa.",
-  "ln.s3.h":"Retine lectia","ln.s3.p":"Nu corectia punctuala &mdash; <em>regula</em> din spate.",
-  "ln.s4.h":"Devine mai bun","ln.s4.p":"Data viitoare deja stie. Pana si recenzorii lui de calitate invata trucuri noi de la oamenii destepti din jurul meu.",
-  "ln.pull":"Isi tine propriul <span class='g'>jurnal de erori</span> si il revizuieste programat. Observa ce nu stia si se duce sa acopere acel gol &mdash; <span class='g'>fara sa i se ceara</span>.",
-  "you.kicker":"Pentru oricine",
-  "you.h2":"Nu trebuie sa fii tehnic &mdash; doar sa te fi saturat sa te tot repeti",
-  "you.lead":"Niciun jargon de invatat. Vorbesti normal; memoria si controlul calitatii se intampla dedesubt. Daca te regasesti in vreuna, un astfel de sistem iti schimba saptamana:",
-  "you.f1.pn":"Incep fiecare zi pierdut","you.f1.b":"Operatorul ocupat","you.f1.s":"Intri direct intr-un brief cu ce s-a schimbat peste noapte, cu actiunile tale deja schitate.",
-  "you.f2.pn":"De ce am decis asta?","you.f2.b":"Ingropat in detalii","you.f2.s":"Nu mai pierzi rationamentul din spatele unei decizii. Contextul e acolo o luna sau un an mai tarziu.",
-  "you.f3.pn":"E in Slack... pe undeva","you.f3.b":"Inecat in unelte","you.f3.s":"Mesaje, apeluri, documente, email &mdash; citite si distilate intr-un singur loc pe care chiar il poti intreba.",
-  "you.f4.pn":"Am explicat asta de 10 ori","you.f4.b":"Te repeti","you.f4.s":"Spune o data. Devine un obicei reutilizabil pe care il pornesti cu o fraza.",
-  "you.pull":"Diferenta intr-o fraza: <span class='g'>o unealta pe care o iei in mana si o reexplici vs. un coleg care deja stie.</span>",
-  "foot.1":"Construit si reglat de mine &mdash; un al doilea creier AI personal care isi aminteste, decide, se verifica singur si se imbunatateste.",
-  "foot.2":"Limbaj normal la intrare. Munca finita si verificata la iesire. Restul se ruleaza singur &mdash; si nu uita."
- }
+ "title": "Al doilea creier AI",
+ "brand": "Al doilea creier",
+ "nav.pain": "Problema",
+ "nav.vs": "Chat vs creier",
+ "nav.day": "O zi",
+ "nav.system": "Sistemul",
+ "nav.learns": "Mă învață",
+ "nav.you": "Pentru oricine",
+ "hero.eyebrow": "AI personal · se rulează singur",
+ "hero.h1": "AI-ul tău te uită<br/>când <span class='g'>schimbi sesiunea.</span>",
+ "hero.sub": "Fiecare chat nou o ia de la zero: reexplici, relipești, refaci. Eu mi-am construit un al doilea creier care ține minte — se rulează singur, se ascute săptămânal și mă așteaptă cu un brief pe birou.",
+ "hero.tag": "Un chat așteaptă, apoi uită. Ăsta lucrează — și ține minte.",
+ "stat.1": "automatizări programate",
+ "stat.2": "reexplicări de context",
+ "stat.3": "memorie care nu uită o decizie",
+ "stat.4": "se ascute săptămânal",
+ "pain.kicker": "Îți sună cunoscut?",
+ "pain.h2": "Un chat AI obișnuit e un pește auriu",
+ "pain.lead": "Genial cinci minute — apoi uită tot. Iată ce te costă, în fiecare zi:",
+ "pain.1.h": "Briefinguri „Ziua Cârtiței”",
+ "pain.1.p": "Reexplici cine ești, proiectul, contextul — <em>iar</em> — la fiecare chat nou. Și mâine la fel.",
+ "pain.2.h": "Răspunsul bun, pierdut",
+ "pain.2.p": "Răspunsul perfect de marțea trecută? Îngropat într-un chat de negăsit. Așa că refaci munca.",
+ "pain.3.h": "Uită la mijlocul conversației",
+ "pain.3.p": "Într-un chat lung uită cum a început — i se umple memoria — se contrazice și pierde detalii.",
+ "pain.4.h": "Taxa de copy-paste",
+ "pain.4.p": "Relipești aceleași documente și linkuri iar și iar, pentru un singur răspuns util.",
+ "pain.5.h": "Sigur pe el, dar depășit",
+ "pain.5.p": "Răspunde din realitatea de luna trecută — decizia schimbată, prețul mutat — fiindcă nimeni nu i-a spus.",
+ "pain.6.h": "Concluziile se evaporă",
+ "pain.6.p": "Orice concluzie bună moare în fereastra de chat. Nimic nu trece mai departe. O iei de la zero.",
+ "pain.pull": "Ni se întâmplă tuturor, de zeci de ori pe zi. Cei mai mulți ridică din umeri. <span class='g'>Eu am construit ceva care nu uită.</span>",
+ "vs.kicker": "Diferența reală",
+ "vs.h2": "Fereastră de chat vs al doilea creier",
+ "vs.lead": "Același AI dedesubt, experiență total diferită — unul ține minte, celălalt nu.",
+ "vs.bad.h": "&#128172; Chat AI simplu",
+ "vs.bad.1": "<b>Memorie:</b> uită când închizi tab-ul.",
+ "vs.bad.2": "<b>Chaturi lungi:</b> pierde firul când se umple memoria.",
+ "vs.bad.3": "<b>Context:</b> relipești tot, de fiecare dată.",
+ "vs.bad.4": "<b>Prospețime:</b> răspunde din ce a apucat să vadă.",
+ "vs.bad.5": "<b>Munca ta bună:</b> dispare prin scroll.",
+ "vs.bad.6": "<b>Efortul:</b> tu ții minte tot.",
+ "vs.good.h": "&#129504; Al doilea creier",
+ "vs.good.1": "<b>Memorie:</b> ține minte peste zile, luni, proiecte.",
+ "vs.good.2": "<b>Istoric lung:</b> index durabil — nu rămâne fără loc.",
+ "vs.good.3": "<b>Context:</b> deja știe; tu doar întrebi.",
+ "vs.good.4": "<b>Prospețime:</b> se reîmprospătează zilnic, semnalează ce e vechi.",
+ "vs.good.5": "<b>Munca ta bună:</b> pusă unde o găsești mereu.",
+ "vs.good.6": "<b>Efortul:</b> ține minte în locul tău.",
+ "vs.foot": "Trucul nu e un chatbot mai deștept. E o <span class='g'>memorie care trăiește în afara conversației</span> — plus automatizări care o țin la zi cât dorm.",
+ "day.kicker": "O zi cu el",
+ "day.h2": "A gândit jumătate din treabă înainte de cafea",
+ "day.lead": "Fără „stai să te pun la curent”, fără relipit. Nu pornesc nimic — se întâmplă singure, zilnic, în fundal.",
+ "day.e1.t": "DIMINEAȚA DEVREME",
+ "day.e1.h": "Citește ziua tocmai trecută",
+ "day.e1.p": "Fiecare mesaj, întâlnire și sesiune relevantă de la ultima verificare — adunate automat. Fără copy-paste, nimic ratat sau citit de două ori.",
+ "day.e2.t": "CÂTEVA CLIPE MAI TÂRZIU",
+ "day.e2.h": "Își actualizează memoria",
+ "day.e2.p": "Decizii, angajamente, cine ce deține, schimbări de status — la locul lor. O lună mai târziu știe și raționamentul, nu doar rezultatul. (Încearcă asta într-un chat.)",
+ "day.e3.t": "APOI",
+ "day.e3.h": "Îmi propune pașii următori",
+ "day.e3.p": "Semnale împrăștiate devin o listă bifabilă — și taie discret ideile slabe înainte să ajungă la mine.",
+ "day.e4.t": "LUNAR",
+ "day.e4.h": "Scanează piața pentru mine",
+ "day.e4.p": "Mișcările din industrie și ce a lansat fiecare competitor — fiecare rând cu „și ce înseamnă pentru noi”.",
+ "day.e5.t": "SĂPTĂMÂNAL",
+ "day.e5.h": "Se autoevaluează",
+ "day.e5.p": "Își trece în revistă săptămâna — ce a irosit, ce a ratat, ce poate mai bine — și-și propune îmbunătățiri.",
+ "sys.kicker": "Sistemul",
+ "sys.h2": "Nu un chatbot — o echipă de specialiști",
+ "sys.lead": "Fiecare parte face o treabă și omoară o durere. Împreună: un șef de cabinet care nu doarme și nu uită.",
+ "sys.c1.h": "Creierul",
+ "sys.c1.p": "Memorie vie a oamenilor, deciziilor și proiectelor — indexată, deci știe <em>unde</em> e totul.",
+ "sys.c1.f": "<b>Omoară:</b> reexplicatul la fiecare chat.",
+ "sys.c2.h": "Captura de noapte",
+ "sys.c2.p": "Zilnic adună ce s-a întâmplat în uneltele mele — de unde a rămas.",
+ "sys.c2.f": "<b>Omoară:</b> concluziile moarte în chat.",
+ "sys.c3.h": "Poarta de calitate",
+ "sys.c3.p": "Înainte să ajungă la mine, lentile experte îl analizează și o a doua opinie îl verifică.",
+ "sys.c3.f": "<b>Omoară:</b> răspunsurile sigure, dar greșite.",
+ "sys.c4.h": "Radarul de piață",
+ "sys.c4.p": "Brief lunar despre industrie și competitori, cu „și ce înseamnă” pe fiecare rând.",
+ "sys.c4.f": "<b>Omoară:</b> să afli ultimul.",
+ "sys.c5.h": "Auto-optimizatorul",
+ "sys.c5.p": "Își auditează eficiența săptămânal — taie risipa, face din ce merge obiceiuri.",
+ "sys.c5.f": "<b>Omoară:</b> un sistem care nu se îmbunătățește.",
+ "sys.c6.h": "Câinele de pază",
+ "sys.c6.p": "Ține uneltele cinstite — semnalează ce derivează, se învechește sau se strică pe tăcute.",
+ "sys.c6.f": "<b>Omoară:</b> degradarea tăcută văzută prea târziu.",
+ "kn.kicker": "Pur și simplu știe",
+ "kn.h2": "Știe ce să facă — și ce să lase în pace",
+ "kn.lead": "Niciun prompt de memorat. Din câteva cuvinte știe ce fac, trimite munca la specialistul potrivit — și știe unde-s limitele.",
+ "kn.do.h": "&#128994; Știe să acționeze",
+ "kn.do.1": "Vede o decizie într-o întâlnire și o face acțiune urmărită.",
+ "kn.do.2": "Recunoaște o ciornă pentru conducere și rulează întâi „va prinde?”.",
+ "kn.do.3": "Scoate faptele potrivite din memorie când apare subiectul — fără reexplicații.",
+ "kn.do.4": "Alege lentila expertă potrivită fără să i se spună.",
+ "kn.dont.h": "&#128993; Știe să se abțină",
+ "kn.dont.1": "Ce e marcat privat nu intră în creier — punct.",
+ "kn.dont.2": "Nu trimite și nu publică singur — propune; eu aprob.",
+ "kn.dont.3": "Nu avansează dacă n-a citit sursele — așteaptă, nu sare peste o zi pe tăcute.",
+ "kn.dont.4": "Nu lasă o idee șlefuită-dar-greșită doar fiindcă sună bine.",
+ "kn.chip1": "intenția dintr-o frază",
+ "kn.chip2": "conștient de confidențialitate",
+ "kn.chip3": "propune, nu execută",
+ "kn.chip4": "eșuează în siguranță",
+ "ln.kicker": "M-a învățat pe mine",
+ "ln.h2": "Un chat repetă greșelile la nesfârșit. Al meu învață o dată.",
+ "ln.lead": "Corectezi un chatbot azi, mâine greșește la fel — nu ți-a mai văzut corecția. Al meu reține <em>corecția</em>, nu doar faptul. Îl îndrepți o dată; lecția rămâne.",
+ "ln.s1.h": "Lucrează",
+ "ln.s1.p": "Scrie ciorne, propune, capturează.",
+ "ln.s2.h": "Îl îndrept",
+ "ln.s2.p": "„Nu — începe cu cifra.” „Noi nu facem așa.”",
+ "ln.s3.h": "Reține lecția",
+ "ln.s3.p": "Nu corecția — <em>regula</em> din spate.",
+ "ln.s4.h": "Devine mai bun",
+ "ln.s4.p": "Data viitoare deja știe. Până și recenzorii lui învață de la oamenii deștepți din jur.",
+ "ln.pull": "Își ține propriul <span class='g'>jurnal de erori</span> și-l revizuiește programat. Vede ce nu știa și acoperă golul — <span class='g'>fără să i se ceară</span>.",
+ "you.kicker": "Pentru oricine",
+ "you.h2": "Nu trebuie să fii tehnic — doar sătul să te repeți",
+ "you.lead": "Niciun jargon. Vorbești normal; memoria și calitatea se întâmplă dedesubt. Dacă te regăsești, îți schimbă săptămâna:",
+ "you.f1.pn": "„Încep ziua pierdut”",
+ "you.f1.b": "Operatorul ocupat",
+ "you.f1.s": "Intri direct într-un brief cu ce s-a schimbat peste noapte, cu acțiunile deja schițate.",
+ "you.f2.pn": "„De ce am decis asta?”",
+ "you.f2.b": "Îngropat în detalii",
+ "you.f2.s": "Nu pierzi raționamentul unei decizii. Contextul e acolo și peste un an.",
+ "you.f3.pn": "„E în Slack… pe undeva”",
+ "you.f3.b": "Înecat în unelte",
+ "you.f3.s": "Mesaje, apeluri, documente, email — distilate într-un loc pe care-l poți întreba.",
+ "you.f4.pn": "„Am explicat de 10 ori”",
+ "you.f4.b": "Te repeți",
+ "you.f4.s": "Spune o dată. Devine un obicei pe care-l pornești cu o frază.",
+ "you.pull": "Diferența într-o frază: <span class='g'>o unealtă pe care o reexplici vs. un coleg care deja știe.</span>",
+ "foot.1": "Construit și reglat de mine — un al doilea creier AI care ține minte, decide, se verifică și se îmbunătățește.",
+ "foot.2": "Limbaj normal la intrare. Muncă finită și verificată la ieșire. Restul se rulează singur — și nu uită."
+}
 };
 (function(){
  document.querySelectorAll('[data-i18n]').forEach(function(el){I18N.en[el.getAttribute('data-i18n')]=el.innerHTML;});
